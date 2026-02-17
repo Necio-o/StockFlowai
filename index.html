@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StockFlow AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
+<style>
+  /* Color de fondo general para el modo oscuro */
+  .dark body {
+    background-color: #020617; /* Slate 950 */
+    color: #f1f5f9;
+  }
+
+  /* Letras blancas solo para elementos de texto principales */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark strong, .dark b {
+    color: #ffffff !important;
+  }
+
+  /* Para que los labels y spans generales se vean bien */
+  .dark label, .dark .text-slate-500, .dark .text-slate-600 {
+    color: #94a3b8 !important; /* Un gris claro legible */
+  }
+
+  /* --- ARREGLO PARA NOTIFICACIONES --- */
+  /* Forzamos a que el panel de notificaciones sea oscuro */
+  .dark .bg-white.shadow-xl.rounded-2xl {
+    background-color: #1e293b !important; /* Slate 800 */
+    border: 1px solid #334155;
+  }
+</style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom": "https://esm.sh/react-dom@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.469.0",
+    "uuid": "https://esm.sh/uuid@^13.0.0",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "react-markdown": "https://esm.sh/react-markdown@^10.1.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
+    "i18next": "https://esm.sh/i18next@23.10.1",
+    "react-i18next": "https://esm.sh/react-i18next@14.1.0"
+  }
+}
+</script>
+<!-- Google Scripts for Drive Integration -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
