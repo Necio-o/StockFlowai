@@ -24,7 +24,7 @@ export interface WhatsAppMessage {
 
 export class WhatsAppService {
   private config: WhatsAppConfig | null = null;
-  private readonly API_ENDPOINT = 'https://graph.instagram.com/v18.0';
+  private readonly API_ENDPOINT = 'https://graph.facebook.com/v18.0';
   private userId: string | null = null;
 
   /**

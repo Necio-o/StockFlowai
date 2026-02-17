@@ -44,7 +44,10 @@ export const RecordForm: React.FC<RecordFormProps> = ({ onAdd, currentProduct, a
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const rawValue = parseFloat(quantity.replace(/\./g, '').replace(',', '.'));
-    if (isNaN(rawValue) || rawValue <= 0) return;
+    if (isNaN(rawValue) || rawValue <= 0) {
+      alert('Por favor ingrese una cantidad válida mayor a 0');
+      return;
+    }
 
     const fullTimestamp = `${date}T${time}`;
 

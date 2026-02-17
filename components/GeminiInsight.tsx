@@ -16,9 +16,15 @@ export const GeminiInsight: React.FC<GeminiInsightProps> = ({ records, stats, an
 
   const handleGenerate = async () => {
     setLoading(true);
-    const report = await generateAnomalyReport(records, [stats], anomalies);
-    setInsight(report);
-    setLoading(false);
+    try {
+      const report = await generateAnomalyReport(records, [stats], anomalies);
+      setInsight(report);
+    } catch (error) {
+      console.error('Error generando reporte con Gemini:', error);
+      setInsight('Error al generar el análisis. Verifica tu conexión o la configuración de la API.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

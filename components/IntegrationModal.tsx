@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { X, Plug, Check, AlertCircle, Github, Mail, MessageSquare, Zap, ExternalLink } from 'lucide-react';
 import { emailService } from '../services/emailService';
 import { googleSheetsService } from '../services/googleSheetsService';
@@ -22,7 +22,6 @@ interface Integration {
 }
 
 export const IntegrationModal: React.FC<IntegrationModalProps> = ({ isOpen, onClose, onConfigureClick }) => {
-  const [selectedIntegration, setSelectedIntegration] = useState<string | null>(null);
 
   // Determinar estado actual de las integraciones
   const getIntegrationStatus = (id: string) => {
@@ -42,7 +41,7 @@ export const IntegrationModal: React.FC<IntegrationModalProps> = ({ isOpen, onCl
       name: 'Google Sheets',
       icon: <Zap className="w-8 h-8" />,
       description: 'Sincroniza datos automáticamente con Google Sheets. Crea reportes dinámicos.',
-      status: getIntegrationStatus('google-sheets') as any,
+      status: getIntegrationStatus('google-sheets'),
       color: 'from-green-500 to-indigo-600',
       integrationType: 'sheets',
       action: () => onConfigureClick?.('sheets')
@@ -52,7 +51,7 @@ export const IntegrationModal: React.FC<IntegrationModalProps> = ({ isOpen, onCl
       name: 'Email Notifications',
       icon: <Mail className="w-8 h-8" />,
       description: 'Recibe alertas, reportes y notificaciones por correo automáticamente.',
-      status: getIntegrationStatus('email') as any,
+      status: getIntegrationStatus('email'),
       color: 'from-blue-500 to-cyan-600',
       integrationType: 'email',
       action: () => onConfigureClick?.('email')
@@ -86,7 +85,7 @@ export const IntegrationModal: React.FC<IntegrationModalProps> = ({ isOpen, onCl
       name: 'WhatsApp Business',
       icon: <MessageSquare className="w-8 h-8" />,
       description: 'Alertas y notificaciones vía WhatsApp a múltiples números.',
-      status: getIntegrationStatus('whatsapp') as any,
+      status: getIntegrationStatus('whatsapp'),
       color: 'from-green-400 to-green-600',
       integrationType: 'whatsapp',
       action: () => onConfigureClick?.('whatsapp')
@@ -99,8 +98,6 @@ export const IntegrationModal: React.FC<IntegrationModalProps> = ({ isOpen, onCl
     }
     if (integration.action) {
       integration.action();
-    } else {
-      setSelectedIntegration(integration.id);
     }
   };
 

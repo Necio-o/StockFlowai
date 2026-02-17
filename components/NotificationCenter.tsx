@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Bell, Trash2, Info, CheckCircle, AlertOctagon, X } from 'lucide-react';
 
 export interface NotificationItem {

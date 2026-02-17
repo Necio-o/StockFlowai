@@ -224,7 +224,21 @@ export const validateFileUpload = (
   }
 
   // Verificar extensión (adicional)
-  const validExtensions = allowedTypes.map(type => type.split('/')[1]);
+  const extensionMap: Record<string, string[]> = {
+    'jpeg': ['jpg', 'jpeg'],
+    'png': ['png'],
+    'gif': ['gif'],
+    'webp': ['webp'],
+    'svg+xml': ['svg'],
+    'pdf': ['pdf'],
+    'vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['xlsx'],
+    'vnd.ms-excel': ['xls'],
+    'vnd.openxmlformats-officedocument.wordprocessingml.document': ['docx'],
+  };
+  const validExtensions = allowedTypes.flatMap(type => {
+    const subType = type.split('/')[1];
+    return extensionMap[subType] || [subType];
+  });
   const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
   if (!validExtensions.includes(fileExtension)) {
     return { valid: false, error: `Extensión no válida: .${fileExtension}` };

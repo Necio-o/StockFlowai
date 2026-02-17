@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckSquare, Plus, Trash2, Edit2, Check, X, ShieldAlert, Clock, Bell, CheckCircle } from 'lucide-react';
+import { CheckSquare, Plus, Trash2, ShieldAlert, Clock, Bell, CheckCircle } from 'lucide-react';
 import { Task, UserRole } from '../types';
 
 interface TaskListProps {

@@ -34,6 +34,7 @@ import {
   guardarTareaNube,
   obtenerTareasNube,
   eliminarTareaNube,
+  eliminarRegistroNube,
   guardarNotificacionNube,
   obtenerNotificacionesNube
 } from "./services/firestore";
@@ -108,9 +109,10 @@ const [products, setProducts] = useState<string[]>(['COAGULANTE SULFATO', 'CARBO
 const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '15-21*', '22-28*', '29-31*']);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [users, setUsers] = useState<UserProfile[]>(INITIAL_USERS);
-  const [records, setRecords] = useState<DailyRecord[]>(MOCK_DATA);
+  const [records, setRecords] = useState<DailyRecord[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState('Materia Prima A');
+  const [selectedProduct, setSelectedProduct] = useState('COAGULANTE SULFATO');
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [settingsMap, setSettingsMap] = useState<SettingsMap>({});
   const [logoutReason, setLogoutReason] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -160,12 +162,6 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-  if (Notification.permission !== 'granted') {
-    Notification.requestPermission();
-  }
-}, []);
 
   // Inactivity Logic
   useEffect(() => {
@@ -325,8 +321,10 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
         }
 
         console.log('✨ Sincronización completada exitosamente');
+        setIsDataLoaded(true);
       } catch (error) {
         console.error('❌ Error en sincronización:', error);
+        setIsDataLoaded(true); // Marcar como cargado aunque falle, para permitir uso offline
       }
     };
 
@@ -363,7 +361,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   // --- AUTO-SINCRONIZACIÓN DE REGISTROS ---
   // Sincroniza cambios en registros con un delay de 5 segundos (OPTIMIZADO: era 2)
   useEffect(() => {
-    if (records.length === 0) return;
+    if (!isDataLoaded || records.length === 0) return;
     
     let timeoutId: any;
     timeoutId = setTimeout(() => {
@@ -378,7 +376,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   // --- AUTO-SINCRONIZACIÓN DE TAREAS ---
   // Sincroniza cambios en tareas con un delay de 5 segundos (OPTIMIZADO: era 2)
   useEffect(() => {
-    if (tasks.length === 0) return;
+    if (!isDataLoaded || tasks.length === 0) return;
     
     let timeoutId: any;
     timeoutId = setTimeout(() => {
@@ -393,7 +391,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   // --- AUTO-SINCRONIZACIÓN DE USUARIOS ---
   // Sincroniza cambios en usuarios con un delay de 5 segundos (OPTIMIZADO: era 2)
   useEffect(() => {
-    if (users.length === 0) return;
+    if (!isDataLoaded || users.length === 0) return;
     
     let timeoutId: any;
     timeoutId = setTimeout(() => {
@@ -408,7 +406,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   // --- AUTO-SINCRONIZACIÓN DE CONFIGURACIÓN ---
   // Sincroniza cambios en ajustes de productos con un delay de 5 segundos (OPTIMIZADO: era 3)
   useEffect(() => {
-    if (Object.keys(settingsMap).length === 0) return;
+    if (!isDataLoaded || Object.keys(settingsMap).length === 0) return;
     
     let timeoutId: any;
     timeoutId = setTimeout(() => {
@@ -593,7 +591,7 @@ const handleToggleTask = async (id: string) => {
   };
 
 const handleEditTask = (id: string, newText: string) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, tarea: newText } : t));
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, text: newText } : t));
   }; 
 
 
@@ -694,9 +692,16 @@ const handleAddRecord = async (newRecord: DailyRecord) => {
     }
   };
 
-  const handleDeleteRecord = (id: string) => {
-    setRecords(prev => prev.filter(r => r.id !== id));
-    addToast('Registro eliminado correctamente', 'info');
+  const handleDeleteRecord = async (id: string) => {
+    try {
+      await eliminarRegistroNube(id);
+      setRecords(prev => prev.filter(r => r.id !== id));
+      addToast('Registro eliminado correctamente', 'info');
+    } catch (error) {
+      console.error('Error al eliminar registro:', error);
+      setRecords(prev => prev.filter(r => r.id !== id));
+      addToast('Registro eliminado localmente (error en la nube)', 'info');
+    }
   };
 
   const handleUpdateSettings = (product: string, newSettings: ProductSettings) => {

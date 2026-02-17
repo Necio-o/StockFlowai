@@ -75,17 +75,30 @@ export async function obtenerFotoGeneral() {
   return docSnap.exists() ? docSnap.data().foto : null;
 }
 
-// OPTIMIZADO: Carga solo últimos 30 días (no toda la historia)
+// Guardar registro usando setDoc para evitar duplicados
 export async function guardarRegistro(data: any) {
   try {
     const limpio = JSON.parse(JSON.stringify(data));
-    const docRef = await addDoc(collection(db, "inventario"), {
+    const registroId = limpio.id || `reg-${Date.now()}`;
+    await setDoc(doc(db, "inventario", registroId), {
       ...limpio,
+      id: registroId,
       fechaGuardado: new Date().toISOString(),
     });
-    return docRef.id;
+    return registroId;
   } catch (e) {
     console.error("Error en nube:", e);
+    throw e;
+  }
+}
+
+// Eliminar registro de la nube
+export async function eliminarRegistroNube(id: string) {
+  try {
+    await deleteDoc(doc(db, "inventario", id));
+    console.log("Registro eliminado de la nube ✅");
+  } catch (e) {
+    console.error("Error eliminando registro:", e);
     throw e;
   }
 }
@@ -187,7 +200,7 @@ export async function guardarTareaNube(task: Task) {
 
 export async function obtenerTareasNube() {
   const snapshot = await getDocs(collection(db, "tareas"));
-  return snapshot.docs.map(doc => ({ ...doc.data() })) as Task[];
+  return snapshot.docs.map(d => ({ ...d.data(), id: d.id })) as Task[];
 }
 
 export async function eliminarTareaNube(id: string) {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
+import { X, Trash2, Eye, EyeOff } from 'lucide-react';
 import { emailService } from '../services/emailService';
 import { googleSheetsService } from '../services/googleSheetsService';
 import { whatsappService } from '../services/whatsappService';

@@ -31,7 +31,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({
   const handleSave = () => {
     onSave({
       targetAverage: target ? Number(target) : null,
-      tolerancePercent: Number(tolerance) || 20
+      tolerancePercent: tolerance !== '' ? Number(tolerance) : 20
     });
   };
 

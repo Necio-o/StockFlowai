@@ -19,10 +19,6 @@ if (!firebaseConfig.apiKey) {
   console.error("📋 Copy .env.example to .env and fill with your credentials");
 }
 
-console.log("🔥 Firebase Config Loaded:");
-console.log("   Project:", firebaseConfig.projectId);
-console.log("   Auth Domain:", firebaseConfig.authDomain);
-
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
