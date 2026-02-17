@@ -118,6 +118,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<'dashboard' | 'records' | 'tasks' | 'analysis' | 'chat'>('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<{type: 'record' | 'task' | 'user', id: string, name?: string} | null>(null);
   
   // Modals State
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
@@ -161,6 +162,18 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Auto-collapse sidebar on small screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setSidebarCollapsed(true);
+      }
+    };
+    handleResize(); // Check on mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Inactivity Logic
@@ -241,6 +254,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
       }
       // Cerrar Modal (Escape)
       else if (e.key === 'Escape') {
+        setConfirmDelete(null);
         setIsAdminPanelOpen(false);
         setIsErrorReportOpen(false);
         setIsCloudSyncOpen(false);
@@ -693,6 +707,10 @@ const handleAddRecord = async (newRecord: DailyRecord) => {
   };
 
   const handleDeleteRecord = async (id: string) => {
+    setConfirmDelete({ type: 'record', id });
+  };
+
+  const handleDeleteRecordConfirmed = async (id: string) => {
     try {
       await eliminarRegistroNube(id);
       setRecords(prev => prev.filter(r => r.id !== id));
@@ -784,10 +802,13 @@ const handleDeleteUser = async (id: string) => {
       addToast('No se puede eliminar al admin principal', 'critical');
       return;
     }
+    const usr = users.find(u => u.id === id);
+    setConfirmDelete({ type: 'user', id, name: usr?.name });
+  };
+
+  const handleDeleteUserConfirmed = async (id: string) => {
     try {
-      // 1. Borrar de la nube
       await eliminarUsuarioNube(id);
-      // 2. Actualizar lista local
       setUsers(prev => prev.filter(u => u.id !== id));
       addToast('Usuario eliminado de la nube 🗑️', 'info');
     } catch (error) {
@@ -797,10 +818,13 @@ const handleDeleteUser = async (id: string) => {
   };
 
 const handleDeleteTask = async (id: string) => {
+    const task = tasks.find(t => t.id === id);
+    setConfirmDelete({ type: 'task', id, name: task?.text });
+  };
+
+  const handleDeleteTaskConfirmed = async (id: string) => {
     try {
-      // 1. Borrar de la nube
       await eliminarTareaNube(id);
-      // 2. Actualizar lista local
       setTasks(prev => prev.filter(t => t.id !== id));
       addToast('Tarea eliminada permanentemente 🗑️', 'info');
     } catch (error) {
@@ -877,6 +901,48 @@ const handleDeleteTask = async (id: string) => {
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
+
+      {/* Confirmation Dialog */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 border border-slate-200 dark:border-slate-700 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-800 dark:text-white">Confirmar eliminación</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Esta acción no se puede deshacer</p>
+              </div>
+            </div>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
+              {confirmDelete.type === 'record' && '¿Estás seguro de eliminar este registro?'}
+              {confirmDelete.type === 'task' && `¿Eliminar la tarea "${confirmDelete.name || 'seleccionada'}"?`}
+              {confirmDelete.type === 'user' && `¿Eliminar al usuario "${confirmDelete.name || 'seleccionado'}"?`}
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="flex-1 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={async () => {
+                  const { type, id } = confirmDelete;
+                  setConfirmDelete(null);
+                  if (type === 'record') await handleDeleteRecordConfirmed(id);
+                  else if (type === 'task') await handleDeleteTaskConfirmed(id);
+                  else if (type === 'user') await handleDeleteUserConfirmed(id);
+                }}
+                className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Profile Modal */}
 <ProfileModal 
@@ -995,11 +1061,11 @@ const handleDeleteTask = async (id: string) => {
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {([
-            { id: 'dashboard' as const, label: 'Panel', icon: LayoutDashboard },
-            { id: 'records' as const, label: 'Registros', icon: ClipboardList },
-            { id: 'analysis' as const, label: 'Gráficos', icon: BarChart3 },
-            { id: 'tasks' as const, label: 'Tareas', icon: ListTodo },
-            { id: 'chat' as const, label: 'Chat', icon: MessageCircle },
+            { id: 'dashboard' as const, label: 'Panel', icon: LayoutDashboard, badge: 0 },
+            { id: 'records' as const, label: 'Registros', icon: ClipboardList, badge: productRecords.length },
+            { id: 'analysis' as const, label: 'Gráficos', icon: BarChart3, badge: 0 },
+            { id: 'tasks' as const, label: 'Tareas', icon: ListTodo, badge: tasks.filter(t => !t.completed).length },
+            { id: 'chat' as const, label: 'Chat', icon: MessageCircle, badge: 0 },
           ]).map(item => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -1007,7 +1073,7 @@ const handleDeleteTask = async (id: string) => {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 relative ${
                   isActive
                     ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200'
@@ -1015,7 +1081,17 @@ const handleDeleteTask = async (id: string) => {
                 title={sidebarCollapsed ? item.label : undefined}
               >
                 <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : ''}`} />
-                {!sidebarCollapsed && <span>{item.label}</span>}
+                {!sidebarCollapsed && <span className="flex-1 text-left">{item.label}</span>}
+                {!sidebarCollapsed && item.badge > 0 && (
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    isActive 
+                      ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' 
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  }`}>{item.badge}</span>
+                )}
+                {sidebarCollapsed && item.badge > 0 && (
+                  <span className="absolute top-0.5 right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
+                )}
               </button>
             );
           })}
