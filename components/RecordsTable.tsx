@@ -167,7 +167,7 @@ export const RecordsTable = ({ records, productos, setProducts, isUserAdmin, add
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="relative rounded-xl shadow-sm overflow-hidden flex justify-between items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:shadow-md">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-50 to-slate-50 dark:from-slate-800 dark:to-slate-800"></div>
         

@@ -1218,7 +1218,7 @@ const handleDeleteTask = async (id: string) => {
       </header>
 
       {/* Content Area */}
-      <main className={`flex-1 overflow-y-auto ${activeSection === 'records' ? 'p-3' : 'p-6'} ${activeSection === 'chat' ? 'flex flex-col' : ''}`}>
+      <main className={`flex-1 overflow-y-auto ${activeSection === 'records' ? 'px-3 py-1' : 'p-6'} ${activeSection === 'chat' ? 'flex flex-col' : ''}`}>
 
         {/* ── DASHBOARD ── */}
         {activeSection === 'dashboard' && (
