@@ -1284,13 +1284,32 @@ const handleDeleteTask = async (id: string) => {
 
         {/* ── REGISTROS ── */}
         {activeSection === 'records' && (
-          <RecordsTable
-            records={records}
-            productos={products}
-            setProducts={setProducts}
-            isUserAdmin={user?.role === 'admin'}
-            addToast={addToast}
-          />
+          <div className="space-y-2">
+            {/* Import / Add bar */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setIsExcelImportOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow transition-all"
+              >
+                <Upload className="w-4 h-4" />
+                Importar Excel
+              </button>
+              <button
+                onClick={() => exportToExcel(records, products, semanasLabel)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow transition-all"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Exportar Excel
+              </button>
+            </div>
+            <RecordsTable
+              records={records}
+              productos={products}
+              setProducts={setProducts}
+              isUserAdmin={user?.role === 'admin'}
+              addToast={addToast}
+            />
+          </div>
         )}
 
         {/* ── GRÁFICOS / ANÁLISIS ── */}
