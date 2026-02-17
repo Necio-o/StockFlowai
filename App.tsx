@@ -1214,7 +1214,7 @@ const handleDeleteTask = async (id: string) => {
 
         {/* ── CHAT ── */}
         {activeSection === 'chat' && (
-          <div className="w-full h-full">
+          <div className="w-full flex-1 min-h-0">
             {user && <ChatSystem currentUser={user} allUsers={users} />}
           </div>
         )}
