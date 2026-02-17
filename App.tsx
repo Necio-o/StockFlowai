@@ -21,7 +21,7 @@ import { generateProductReport } from './services/pdfService';
 import { calculateStats, detectAnomalies } from './utils/mathUtils';
 import { createDesktopShortcut } from './utils/desktopShortcut';
 import { DailyRecord, UserProfile, ProductSettings, SettingsMap, Task } from './types';
-import { LayoutDashboard, AlertOctagon, LogOut, UserCircle, FileDown, Moon, Sun, Loader2, Settings, ShieldAlert, Cloud, User, Users, Keyboard, Plug, Download, BarChart3, ClipboardList, ListTodo, ChevronLeft, ChevronRight, Package, MessageCircle } from 'lucide-react';
+import { LayoutDashboard, AlertOctagon, LogOut, UserCircle, FileDown, Moon, Sun, Loader2, Settings, ShieldAlert, Cloud, User, Users, Keyboard, Plug, Download, BarChart3, ClipboardList, ListTodo, ChevronLeft, ChevronRight, Package, MessageCircle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { 
   db,
@@ -1251,19 +1251,30 @@ const handleDeleteTask = async (id: string) => {
 
         {/* ── REGISTROS ── */}
         {activeSection === 'records' && (
-          <div className="space-y-6">
-            <RecordForm
-              onAdd={handleAddRecord}
-              currentProduct={selectedProduct}
-              availableProducts={products}
-            />
-            <DateFilter
-              startDate={dateRange.start}
-              endDate={dateRange.end}
-              onStartDateChange={(date) => setDateRange(prev => ({ ...prev, start: date }))}
-              onEndDateChange={(date) => setDateRange(prev => ({ ...prev, end: date }))}
-              onClear={() => setDateRange({ start: '', end: '' })}
-            />
+          <div className="space-y-4">
+            {/* Collapsible Record Form */}
+            <details className="group">
+              <summary className="flex items-center gap-2 cursor-pointer list-none rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 shadow-sm hover:shadow-md transition-all">
+                <Plus className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Agregar Registro</span>
+                <ChevronDown className="w-4 h-4 text-slate-400 ml-auto group-open:hidden" />
+                <ChevronUp className="w-4 h-4 text-slate-400 ml-auto hidden group-open:block" />
+              </summary>
+              <div className="mt-2 space-y-3">
+                <RecordForm
+                  onAdd={handleAddRecord}
+                  currentProduct={selectedProduct}
+                  availableProducts={products}
+                />
+                <DateFilter
+                  startDate={dateRange.start}
+                  endDate={dateRange.end}
+                  onStartDateChange={(date) => setDateRange(prev => ({ ...prev, start: date }))}
+                  onEndDateChange={(date) => setDateRange(prev => ({ ...prev, end: date }))}
+                  onClear={() => setDateRange({ start: '', end: '' })}
+                />
+              </div>
+            </details>
             <RecordsTable
               records={records}
               productos={products}
