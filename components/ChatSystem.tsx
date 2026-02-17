@@ -213,27 +213,6 @@ export const ChatSystem = ({ currentUser, allUsers }: { currentUser: UserProfile
       {/* ─── ÁREA DE MENSAJES (DERECHA) ─── */}
       <div className="flex-1 flex flex-col">
         
-        {/* Header del Chat */}
-        <div className="p-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden border border-slate-300 dark:border-slate-600 flex items-center justify-center">
-            {activeChat.id === 'general' ? (
-              generalPhoto ? <img src={generalPhoto} className="w-full h-full object-cover" /> : <Users className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-            ) : (
-              activeChat.avatar ? <img src={activeChat.avatar} className="w-full h-full object-cover" /> : <User className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-            )}
-            {activeChat.id === 'general' && currentUser.role === 'admin' && (
-              <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 cursor-pointer transition-opacity">
-                <Camera size={12} />
-                <input type="file" className="hidden" accept="image/*" onChange={handleGeneralPhotoUpload} />
-              </label>
-            )}
-          </div>
-          <div className="flex-1">
-            <h3 className="font-bold text-slate-800 dark:text-white">{activeChat.name}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">En línea</p>
-          </div>
-        </div>
-
         {/* Mensajes */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-900">
           {messages.map((msg) => (
