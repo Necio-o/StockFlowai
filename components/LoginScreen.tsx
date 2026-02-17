@@ -168,9 +168,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ users, onLogin, isDark
       </div>
 
       {/* Versión de la app */}
-      <div className="absolute bottom-4 right-4 z-20">
-        <span className="text-[11px] text-slate-400/60 dark:text-slate-600 font-mono">
-          v1.0.0
+      <div className="absolute bottom-4 right-4 z-20 text-right">
+        <span className="text-[11px] text-slate-400/60 dark:text-slate-600 font-mono block">
+          v1.5.0
+        </span>
+        <span className="text-[10px] text-slate-400/40 dark:text-slate-700 font-mono block">
+          Importación Excel · Diálogos confirmación · Badges · Correcciones
         </span>
       </div>
     </div>

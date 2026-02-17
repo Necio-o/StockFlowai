@@ -1,6 +1,6 @@
 {
   "name": "stockflow-ai",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "StockFlow AI - Sistema inteligente de gestión de inventario y anomalías",
   "author": "StockFlow Development Team",
   "private": true,
