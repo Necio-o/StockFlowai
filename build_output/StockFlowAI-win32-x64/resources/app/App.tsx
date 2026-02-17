@@ -1218,7 +1218,7 @@ const handleDeleteTask = async (id: string) => {
       </header>
 
       {/* Content Area */}
-      <main className={`flex-1 overflow-y-auto p-6 ${activeSection === 'chat' ? 'flex flex-col' : ''}`}>
+      <main className={`flex-1 overflow-y-auto ${activeSection === 'records' ? 'p-3' : 'p-6'} ${activeSection === 'chat' ? 'flex flex-col' : ''}`}>
 
         {/* ── DASHBOARD ── */}
         {activeSection === 'dashboard' && (
@@ -1251,38 +1251,13 @@ const handleDeleteTask = async (id: string) => {
 
         {/* ── REGISTROS ── */}
         {activeSection === 'records' && (
-          <div className="space-y-4">
-            {/* Collapsible Record Form */}
-            <details className="group">
-              <summary className="flex items-center gap-2 cursor-pointer list-none rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 shadow-sm hover:shadow-md transition-all">
-                <Plus className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Agregar Registro</span>
-                <ChevronDown className="w-4 h-4 text-slate-400 ml-auto group-open:hidden" />
-                <ChevronUp className="w-4 h-4 text-slate-400 ml-auto hidden group-open:block" />
-              </summary>
-              <div className="mt-2 space-y-3">
-                <RecordForm
-                  onAdd={handleAddRecord}
-                  currentProduct={selectedProduct}
-                  availableProducts={products}
-                />
-                <DateFilter
-                  startDate={dateRange.start}
-                  endDate={dateRange.end}
-                  onStartDateChange={(date) => setDateRange(prev => ({ ...prev, start: date }))}
-                  onEndDateChange={(date) => setDateRange(prev => ({ ...prev, end: date }))}
-                  onClear={() => setDateRange({ start: '', end: '' })}
-                />
-              </div>
-            </details>
-            <RecordsTable
-              records={records}
-              productos={products}
-              setProducts={setProducts}
-              isUserAdmin={user?.role === 'admin'}
-              addToast={addToast}
-            />
-          </div>
+          <RecordsTable
+            records={records}
+            productos={products}
+            setProducts={setProducts}
+            isUserAdmin={user?.role === 'admin'}
+            addToast={addToast}
+          />
         )}
 
         {/* ── GRÁFICOS / ANÁLISIS ── */}
