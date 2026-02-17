@@ -164,24 +164,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ users, onLogin, isDark
               )}
             </button>
           </form>
-
-          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-            <p className="text-xs text-center text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider mb-3">Accesos rápidos</p>
-            <div className="flex justify-center gap-3">
-              <div 
-                className="px-3 py-1.5 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors cursor-pointer" 
-                onClick={() => {setUsername('admin'); setPassword('admin123')}}
-              >
-                 <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">admin / admin123</span>
-              </div>
-              <div 
-                className="px-3 py-1.5 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors cursor-pointer" 
-                onClick={() => {setUsername('operador'); setPassword('user123')}}
-              >
-                 <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">operador / user123</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
