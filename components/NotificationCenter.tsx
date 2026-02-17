@@ -27,6 +27,30 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Click outside handler
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
+  const formatTime = (timestamp: Date) => {
+    const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'Ahora';
+    if (diffMin < 60) return `Hace ${diffMin}m`;
+    const diffHours = Math.floor(diffMin / 60);
+    if (diffHours < 24) return `Hace ${diffHours}h`;
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+  };
+
   const getIcon = (type: string) => {
     switch (type) {
       case 'critical': return <AlertOctagon className="w-4 h-4 text-red-600" />;
@@ -64,10 +88,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               <div className="p-8 text-center text-slate-400 text-sm">No hay notificaciones</div>
             ) : (
               notifications.map((note) => (
-                <div key={note.id} className={`p-4 flex items-start gap-3 border-l-4 ${note.type === 'critical' ? 'border-l-red-500 bg-red-50/30' : 'border-l-indigo-500'}`}>
+                <div key={note.id} className={`p-4 flex items-start gap-3 border-l-4 ${note.type === 'critical' ? 'border-l-red-500 bg-red-50/30 dark:bg-red-900/10' : note.type === 'success' ? 'border-l-emerald-500 bg-emerald-50/30 dark:bg-emerald-900/10' : 'border-l-indigo-500'}`}>
                   {getIcon(note.type)}
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-900 dark:text-white">{note.message}</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{formatTime(note.timestamp)}</p>
                   </div>
                 </div>
               ))

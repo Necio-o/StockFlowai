@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -19,16 +19,13 @@ interface ChartsProps {
 }
 
 export const Charts: React.FC<ChartsProps> = ({ data, stats, isDarkMode = false }) => {
-  // Map data to include a sequence index. 
-  // This ensures that even if multiple records have the same date, 
-  // they are plotted as distinct points flowing from left to right.
-  const sortedData = [...data]
+  const sortedData = useMemo(() => [...data]
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .map((record, index) => ({
       ...record,
       sequenceIndex: index,
       displayDate: record.date
-    }));
+    })), [data]);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {

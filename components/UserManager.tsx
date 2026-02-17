@@ -143,7 +143,7 @@ export const UserManager: React.FC<UserManagerProps> = ({ users, currentUser, on
                     className="w-1/2 px-3 py-2 text-sm rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-1 focus:ring-indigo-500 outline-none"
                 />
                 <input
-                    type="text" 
+                    type="password" 
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="Contraseña (mín. 8 caracteres)"
@@ -163,7 +163,7 @@ export const UserManager: React.FC<UserManagerProps> = ({ users, currentUser, on
                     type="submit"
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center text-white ${
                         editingId 
-                        ? 'bg-indigo-600 hover:bg-indigo-700' 
+                        ? 'bg-amber-600 hover:bg-amber-700' 
                         : 'bg-indigo-600 hover:bg-indigo-700'
                     }`}
                 >

@@ -853,6 +853,26 @@ const handleDeleteTask = async (id: string) => {
     );
   }
 
+  // Pantalla de carga mientras se sincronizan datos
+  if (!isDataLoaded) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-500/25 animate-pulse">
+            <LayoutDashboard className="w-8 h-8 text-white" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Cargando datos...</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Sincronizando con la nube</p>
+          </div>
+          <div className="flex justify-center">
+            <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
 
@@ -1122,7 +1142,7 @@ const handleDeleteTask = async (id: string) => {
       </header>
 
       {/* Content Area */}
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className={`flex-1 overflow-y-auto p-6 ${activeSection === 'chat' ? 'flex flex-col' : ''}`}>
 
         {/* ── DASHBOARD ── */}
         {activeSection === 'dashboard' && (
