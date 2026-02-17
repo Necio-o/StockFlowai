@@ -1197,26 +1197,26 @@ const handleDeleteTask = async (id: string) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsExcelImportOpen(true)}
-              className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+              className="flex items-center text-xs font-medium px-4 py-1.5 rounded-lg transition-all text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm"
               title="Importar Excel"
             >
               <Upload className="w-3.5 h-3.5 mr-1.5" />
-              <span className="hidden sm:inline">Importar</span>
+              Importar
             </button>
 
             <button
               onClick={() => exportToExcel(records, products, semanasLabel)}
-              className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm"
+              className="flex items-center text-xs font-medium px-4 py-1.5 rounded-lg transition-all text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm"
               title="Descargar Excel"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5" />
-              <span className="hidden sm:inline">Excel</span>
+              Excel
             </button>
 
             <button
               onClick={handleDownloadReport}
               disabled={isGeneratingReport}
-              className={`flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
+              className={`flex items-center text-xs font-medium px-4 py-1.5 rounded-lg transition-all ${
                 isGeneratingReport
                 ? 'bg-slate-100 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
                 : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600'
@@ -1228,7 +1228,7 @@ const handleDeleteTask = async (id: string) => {
               ) : (
                 <>
                   <FileDown className="w-3.5 h-3.5 mr-1.5" />
-                  <span className="hidden sm:inline">PDF</span>
+                  PDF
                 </>
               )}
             </button>
