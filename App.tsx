@@ -1101,11 +1101,6 @@ const handleDeleteTask = async (id: string) => {
 
             <div className="h-5 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
-            {/* Chat integrado en header */}
-            {user && <ChatSystem currentUser={user} allUsers={users} />}
-
-            <div className="h-5 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
-
             <button onClick={toggleTheme} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 dark:hover:text-slate-300 rounded-lg transition-all">
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
