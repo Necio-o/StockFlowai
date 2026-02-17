@@ -11,9 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "electron": "cross-env NODE_ENV=development electron .",
-    "dist": "electron-builder",
-    "dist:win": "npm run build && cross-env NODE_ENV=production electron-packager . StockFlowAI --platform=win32 --arch=x64 --out=release --icon=public/icon.ico --overwrite --asar --extra-resource=node_modules && powershell -Command \"Copy-Item -Path 'release/StockFlowAI-win32-x64/StockFlowAI.exe' -Destination 'StockFlowAI-Instalador.exe'\""
-
+    "package": "npm run build && electron-packager . StockFlowAI --platform=win32 --arch=x64 --out=StockFlowAI-App --overwrite --ignore=\"StockFlowAI-App|release|dist_electron|dist_electron2|build_output|\\.git\""
   },
   "dependencies": {
     "@google/genai": "^1.40.0",

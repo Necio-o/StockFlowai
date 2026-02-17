@@ -1,5 +1,0 @@
-{
-  "name": "StockFlow AI",
-  "description": "Sistema inteligente de seguimiento de materiales que calcula promedios diarios, identifica anomalías de uso y asegura que el ingreso coincida con el uso mediante análisis estadístico e IA Gemini.",
-  "requestFramePermissions": []
-}
