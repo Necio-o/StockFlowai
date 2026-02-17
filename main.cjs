@@ -26,31 +26,26 @@ function createWindow() {
   } else {
     console.log('[PRODUCTION MODE] Loading from dist/');
     
-    // Intenta encontrar index.html en varias ubicaciones
-    const possiblePaths = [
-      path.join(__dirname, 'resources/app/dist/index.html'),
-      path.join(__dirname, '../app/dist/index.html'),
-      path.join(__dirname, 'dist/index.html'),
-      path.join(process.resourcesPath, 'app/dist/index.html')
-    ];
+    // En producción, buscar el archivo dist/index.html
+    const indexPath = path.join(__dirname, 'dist', 'index.html');
+    console.log(`Intentando cargar: ${indexPath}`);
+    console.log(`Existe: ${fs.existsSync(indexPath)}`);
     
-    let foundPath = null;
-    for (const filePath of possiblePaths) {
-      console.log(`Buscando: ${filePath}`);
-      if (fs.existsSync(filePath)) {
-        foundPath = filePath;
-        console.log(`✅ Encontrado en: ${filePath}`);
-        break;
-      }
-    }
-    
-    if (foundPath) {
-      win.loadFile(foundPath);
+    if (fs.existsSync(indexPath)) {
+      win.loadFile(indexPath);
     } else {
-      console.error('❌ No se encontró index.html. Rutas buscadas:');
-      possiblePaths.forEach(p => console.error(`  - ${p}`));
-      // Fallback: intentar cargar como URL
-      win.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
+      console.error(`❌ No se encontró ${indexPath}`);
+      // Fallback alternativo
+      const altPath = path.join(__dirname, 'index.html');
+      if (fs.existsSync(altPath)) {
+        console.log(`Fallback a: ${altPath}`);
+        win.loadFile(altPath);
+      } else {
+        // Última opción
+        const resourcePath = path.join(process.resourcesPath, 'app', 'dist', 'index.html');
+        console.log(`Último intento: ${resourcePath}`);
+        win.loadFile(resourcePath);
+      }
     }
   }
   
