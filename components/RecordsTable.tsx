@@ -130,7 +130,7 @@ export const RecordsTable = ({ records, productos, setProducts, isUserAdmin, add
     const ultimoDia = new Date(year, month + 1, 0).getDate();
     let primerJueves = new Date(year, month, 1);
     while (primerJueves.getDay() !== 4) { primerJueves.setDate(primerJueves.getDate() + 1); }
-    const semanas = [];
+    const semanas: { label: string; inicio: Date; end: Date }[] = [];
     let fechaIteracion = new Date(primerJueves);
     while (fechaIteracion.getMonth() === month) {
       let inicio = new Date(fechaIteracion);
@@ -143,6 +143,13 @@ export const RecordsTable = ({ records, productos, setProducts, isUserAdmin, add
         end: new Date(fin.setHours(23,59,59,999))
       });
       fechaIteracion.setDate(fechaIteracion.getDate() + 7);
+    }
+    // Extender la primera semana para cubrir desde el día 1 del mes
+    // Esto evita que registros antes del primer jueves queden fuera de las tablas
+    if (semanas.length > 0 && semanas[0].inicio.getDate() > 1) {
+      const primerDia = new Date(year, month, 1, 0, 0, 0, 0);
+      semanas[0].inicio = primerDia;
+      semanas[0].label = `01-${semanas[0].label.split('-')[1]}`;
     }
     return { nombreMes: name, añoActual: year, bloquesSemanas: semanas };
   }, [monthOffset]);
@@ -160,8 +167,8 @@ export const RecordsTable = ({ records, productos, setProducts, isUserAdmin, add
   };
 
   return (
-    <div className="space-y-4 mt-6">
-      <div className="rounded-xl shadow-sm overflow-hidden flex justify-between items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:shadow-md">
+    <div className="space-y-4">
+      <div className="relative rounded-xl shadow-sm overflow-hidden flex justify-between items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:shadow-md">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-50 to-slate-50 dark:from-slate-800 dark:to-slate-800"></div>
         
         <div className="relative flex items-center gap-4 px-4 py-1">

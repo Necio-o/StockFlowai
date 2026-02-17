@@ -1265,7 +1265,7 @@ const handleDeleteTask = async (id: string) => {
               onClear={() => setDateRange({ start: '', end: '' })}
             />
             <RecordsTable
-              records={productRecords}
+              records={records}
               productos={products}
               setProducts={setProducts}
               isUserAdmin={user?.role === 'admin'}

@@ -1,0 +1,42 @@
+{
+  "appId": "com.stockflow.ai",
+  "productName": "StockFlow AI",
+  "asar": true,
+  "directories": {
+    "output": "release",
+    "buildResources": "public"
+  },
+  "files": [
+    "dist/**/*",
+    "main.cjs",
+    "preload.cjs",
+    "public/**/*",
+    "node_modules/**/*"
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "StockFlow AI",
+    "installerIcon": "public/icon.ico",
+    "uninstallerIcon": "public/icon.ico",
+    "installerHeaderIcon": "public/icon.ico",
+    "installerSidebar": "public/icon.ico",
+    "artifactName": "StockFlowAI-Instalador.exe",
+    "installerLanguages": [
+      "es_ES",
+      "en_US"
+    ]
+  }
+}

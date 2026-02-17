@@ -19,7 +19,7 @@ export const DateFilter: React.FC<DateFilterProps> = ({
   const hasFilter = startDate || endDate;
 
   return (
-    <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
+    <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
       <div className="flex items-center text-slate-700 dark:text-slate-200">
         <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded-lg mr-3">
             <Filter className="w-5 h-5 text-slate-500 dark:text-slate-400" />
