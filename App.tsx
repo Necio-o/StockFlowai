@@ -1197,11 +1197,11 @@ const handleDeleteTask = async (id: string) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsExcelImportOpen(true)}
-              className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-white bg-blue-600 hover:bg-blue-700 shadow-sm"
+              className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm"
               title="Importar Excel"
             >
               <Upload className="w-3.5 h-3.5 mr-1.5" />
-              Importar
+              <span className="hidden sm:inline">Importar</span>
             </button>
 
             <button
@@ -1210,7 +1210,7 @@ const handleDeleteTask = async (id: string) => {
               title="Descargar Excel"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5" />
-              Excel
+              <span className="hidden sm:inline">Excel</span>
             </button>
 
             <button
