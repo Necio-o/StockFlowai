@@ -51,8 +51,9 @@ import {
   AutoSyncManager
 } from "./services/syncService";
 import { exportToExcel } from './services/excelService';
-import { FileSpreadsheet } from 'lucide-react'; // Icono de Excel
+import { FileSpreadsheet, Upload } from 'lucide-react';
 import { ChatSystem } from './components/ChatSystem';
+import { ExcelImportModal } from './components/ExcelImportModal';
 import { IntegrationModal } from './components/IntegrationModal';
 import IntegrationConfigModal from './components/IntegrationConfigModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
@@ -127,6 +128,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isIntegrationModalOpen, setIsIntegrationModalOpen] = useState(false);
   const [isKeyboardShortcutsOpen, setIsKeyboardShortcutsOpen] = useState(false);
+  const [isExcelImportOpen, setIsExcelImportOpen] = useState(false);
   const [integrationConfigOpen, setIntegrationConfigOpen] = useState<'email' | 'sheets' | 'whatsapp' | null>(null);
   const [isCreatingShortcut, setIsCreatingShortcut] = useState(false);
   
@@ -262,6 +264,7 @@ const [semanasLabel, setSemanasLabel] = useState<string[]>(['1-07*', '08-14*', '
         setIsIntegrationModalOpen(false);
         setIsKeyboardShortcutsOpen(false);
         setIntegrationConfigOpen(null);
+        setIsExcelImportOpen(false);
       }
       // Modo Oscuro (Ctrl+M)
       else if (e.ctrlKey && e.key.toLowerCase() === 'm') {
@@ -706,6 +709,20 @@ const handleAddRecord = async (newRecord: DailyRecord) => {
     }
   };
 
+  const handleImportRecords = async (newRecords: DailyRecord[]) => {
+    let successCount = 0;
+    for (const record of newRecords) {
+      try {
+        await guardarRegistro(record);
+        successCount++;
+      } catch (err) {
+        console.error('Error importing record:', err);
+      }
+    }
+    setRecords(prev => [...prev, ...newRecords]);
+    addToast(`${successCount} registros importados y sincronizados ✅`, 'success');
+  };
+
   const handleDeleteRecord = async (id: string) => {
     setConfirmDelete({ type: 'record', id });
   };
@@ -1004,6 +1021,13 @@ const handleDeleteTask = async (id: string) => {
             onClose={() => setIsKeyboardShortcutsOpen(false)}
           />
 
+          <ExcelImportModal
+            isOpen={isExcelImportOpen}
+            onClose={() => setIsExcelImportOpen(false)}
+            onImport={handleImportRecords}
+            existingProducts={products}
+          />
+
           {integrationConfigOpen && (
             <IntegrationConfigModal 
               isOpen={true}
@@ -1171,6 +1195,15 @@ const handleDeleteTask = async (id: string) => {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsExcelImportOpen(true)}
+              className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 border border-emerald-200 dark:border-emerald-700 shadow-sm"
+              title="Importar Excel"
+            >
+              <Upload className="w-3.5 h-3.5 mr-1.5" />
+              <span className="hidden sm:inline">Importar</span>
+            </button>
+
             <button
               onClick={() => exportToExcel(records, products, semanasLabel)}
               className="flex items-center text-xs font-medium px-3 py-1.5 rounded-lg transition-all text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm"
