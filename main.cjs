@@ -26,26 +26,16 @@ function createWindow() {
   } else {
     console.log('[PRODUCTION MODE] Loading from dist/');
     
-    // En producción, buscar el archivo dist/index.html
+    // En producción, usar file:// protocol de forma segura
     const indexPath = path.join(__dirname, 'dist', 'index.html');
-    console.log(`Intentando cargar: ${indexPath}`);
-    console.log(`Existe: ${fs.existsSync(indexPath)}`);
+    const fileUrl = `file://${indexPath.replace(/\\/g, '/')}`;
+    console.log(`Cargando: ${fileUrl}`);
     
     if (fs.existsSync(indexPath)) {
-      win.loadFile(indexPath);
+      win.loadURL(fileUrl);
     } else {
       console.error(`❌ No se encontró ${indexPath}`);
-      // Fallback alternativo
-      const altPath = path.join(__dirname, 'index.html');
-      if (fs.existsSync(altPath)) {
-        console.log(`Fallback a: ${altPath}`);
-        win.loadFile(altPath);
-      } else {
-        // Última opción
-        const resourcePath = path.join(process.resourcesPath, 'app', 'dist', 'index.html');
-        console.log(`Último intento: ${resourcePath}`);
-        win.loadFile(resourcePath);
-      }
+      win.loadURL(`file://${path.join(__dirname, 'index.html').replace(/\\/g, '/')}`);
     }
   }
   
